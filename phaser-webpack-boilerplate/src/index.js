@@ -1,10 +1,14 @@
 import Phaser from "phaser";
 
 const SNAKE_VELOCITY = 200;
+const GLOBAL_CONFIG = {
+  width: 800,
+  height: 600,
+}
 
 class MainScene extends Phaser.Scene {
-  constructor() {
-    super({ key: "MainScene" });
+  constructor(config) {
+    super("MainScene" , config);
     this.snake = null;
     this.fruit = null;
     this.score = 0;
@@ -15,6 +19,7 @@ class MainScene extends Phaser.Scene {
     this.load.image("snake", "assets/snake.png");
     this.load.image("fruit", "assets/bird.png");
     this.load.image("background", "assets/background.png");
+    this.load.image("pause_button", "assets/pause.png");
   }
 
   create() {
@@ -46,6 +51,16 @@ class MainScene extends Phaser.Scene {
 
     // Puntaje
     this.scoreText = this.add.text(10, 10, `Score: ${this.score}`, { fontSize: "32px", fill: "#000" });
+
+    //Pausa
+    this.pauseButton = this.add.image(this.game.config.width - 10, 10, "pause_button") //Se ancla en la parte derecha del boton
+            .setOrigin(1,0)
+            .setScale(2)
+            .setInteractive();
+    this.pauseButton.on("pointerup", this.pause, this); //Evento pointerup 
+        
+
+    this.isPaused = false;
   }
 
   update() {
@@ -86,17 +101,28 @@ class MainScene extends Phaser.Scene {
     this.score += 10;
     this.scoreText.setText(`Score: ${this.score}`);
 
-    // Mover la fruta a una nueva posición aleatoria y detener movimiento por sus fisicas
+    // Mover la fruta a una nueva posición aleatoria y detener movimiento
     this.fruit.setPosition(Phaser.Math.Between(0, this.game.config.width), Phaser.Math.Between(0, this.game.config.height));
     this.fruit.body.velocity.x= 0;
     this.fruit.body.velocity.y= 0;
     
 }
+
+   pause() {
+      this.physics.pause();
+      this.moveDown.pause();
+      this.moveUp.pause();
+      this.moveLeft.pause();
+      this.moveRight.pause();
+      this.isPaused = true;
+      this.pauseButton.setVisible(false);
+   }
 }
 
 
 const config = {
   type: Phaser.AUTO,
+  ...GLOBAL_CONFIG,
   width: 640,
   height: 480,
   scene: [MainScene],
