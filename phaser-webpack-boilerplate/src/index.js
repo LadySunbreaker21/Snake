@@ -118,9 +118,34 @@ class MainScene extends Phaser.Scene {
   update() {
     // Verificar si la serpiente se sale de la pantalla
     if (this.snake.x < 0 || this.snake.x > this.game.config.width || this.snake.y < 0 || this.snake.y > this.game.config.height) {
-      this.score = 0;
-      this.scene.restart();
+      this.fruit.stop("fruitAnimation");
+
+      const gameOverText = this.add.text(
+        this.game.config.width / 2,
+        this.game.config.height / 2 - 100,
+        "Game Over",
+        { fontSize: "48px", fill: "#FFF" }
+      );
+      gameOverText.setOrigin(0.5);
+      
+      const restartButton = this.add.text(
+        this.game.config.width / 2,
+        this.game.config.height / 2,
+        "Restart",
+        { fontSize: "32px", fill: "#FFF" }
+        
+      );
+      
+      restartButton.setOrigin(0.5);
+      restartButton.setInteractive();
+      restartButton.on("pointerup", () => {
+        this.scene.start("MainScene");
+        this.score = 0;
+        
+        
+      });
     }
+  
   }
 
   moveRight() {
