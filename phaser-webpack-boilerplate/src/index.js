@@ -7,7 +7,7 @@ const GLOBAL_CONFIG = {
   width: 800,
   height: 600,
 };
-
+//Commit Prueba-Arreglo de branch
 
 class MainScene extends Phaser.Scene {
   constructor(config) {
