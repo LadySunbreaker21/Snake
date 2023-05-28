@@ -1,59 +1,35 @@
-import SnakeScene from "./snake-scene";
+import Phaser from "phaser";
 
-export default class MenuScene extends SnakeScene {
-    constructor(config) {
-        super("MenuScene", config);
-    }
+export default class MenuScene extends Phaser.Scene {
+  constructor(config) {
+    super("MenuScene", config);
+  }
 
+  preload() {
+
+    this.load.image("background", "assets/background.png");
+  }
+  create() {
+   
+        const backgroundImage = this.add.image(
+          this.game.config.width / 2,
+          this.game.config.height / 2,
+          "background"
+        );
+      backgroundImage.setOrigin(0.5);
     
+    const startButton = this.add.text(
+      this.game.config.width / 2,
+      this.game.config.height / 2,
+      "Comenzar",
+      { fontSize: "32px", fill: "#FFF" }
+    );
+    startButton.setOrigin(0.5);
+    startButton.setInteractive();
+    startButton.on("pointerup", this.startGame, this);
+  }
 
-    preload() {
-        this.load.image("background", "assets/bomb.png");
-    }
-
-    create() {
-        super.create();
-
-        const playButtonCallbacks = {
-            onClick: this.playButton_OnClick,
-            onMouseEnter: this.anyButton_OnMouseEnter,
-            onMouseExit: this.anyButton_OnMouseExit,
-        }
-
-        const scoreButtonCallbacks = {
-            onClick: this.scoreButton_OnClick,
-            onMouseEnter: this.anyButton_OnMouseEnter,
-            onMouseExit: this.anyButton_OnMouseExit,
-        }
-
-        const mainMenu = {
-            items: [
-                {label: "Play", style: {sontSize: "32px", fill: "#FFF"}, ...playButtonCallbacks},
-                {label: "Score", style: {sontSize: "32px", fill: "#FFF"}, ...scoreButtonCallbacks},
-            ],
-
-
-            fisrtItemPosition: {x: this.config.width / 2, y: this.config.height / 2},
-            origin: {x: 0.5, y: 0.5},
-            spacing: 45
-        }
-        this.showMenu(mainMenu);
-    }
-
-    playButton_OnClick() {
-        this.scene.start("MainScene");
-    }
-
-    scoreButton_OnClick() {
-        this.scene.start("ScoreScene");
-
-    }
-
-    anyButton_OnMouseExit(text) {
-        text.setFill("#0F0");
-    }
-
-    anyButton_OnMouseEnter(text) {
-        text.setFill("#FFF");
-    }
+  startGame() {
+    this.scene.start("MainScene");
+  }
 }

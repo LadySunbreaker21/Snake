@@ -118,6 +118,7 @@ class MainScene extends Phaser.Scene {
   update() {
     // Verificar si la serpiente se sale de la pantalla
     if (this.snake.x < 0 || this.snake.x > this.game.config.width || this.snake.y < 0 || this.snake.y > this.game.config.height) {
+      this.pauseButton.setVisible(false);
       this.fruit.stop("fruitAnimation");
 
       const gameOverText = this.add.text(
@@ -239,7 +240,7 @@ class MainScene extends Phaser.Scene {
 
   quitGame() {
     this.score = 0;
-    this.scene.restart();
+    this.scene.start("MenuScene");
   }
 }
 
@@ -248,8 +249,9 @@ const config = {
   ...GLOBAL_CONFIG,
   pixelArt: true,
   scene: [
-    new MainScene(GLOBAL_CONFIG),
-    new MenuScene(GLOBAL_CONFIG)
+    new MenuScene(GLOBAL_CONFIG),
+    new MainScene(GLOBAL_CONFIG)
+   
   ],
   physics: {
     default: "arcade",
